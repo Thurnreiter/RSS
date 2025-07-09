@@ -71,6 +71,13 @@ begin
   Memo1.Lines.Clear;
 
   Parser := TFeedParser.Create;
+  Parser.OnNotValidateException :=
+    procedure(Sender: TArray<string>; Ex: Exception)
+    begin
+      if Assigned(Ex) and (Length(sender) > 0) then
+          raise Ex;
+    end;
+
   FeedChannel := Parser.ParseRSSFeed(AFeed);
 
   Memo1.Lines.Add('--RSS Feed--');
@@ -80,6 +87,9 @@ begin
   Memo1.Lines.Add('Language: ' + FeedChannel.Language);
   Memo1.Lines.Add('Copyright: ' + FeedChannel.Copyright);
   Memo1.Lines.Add('PubDate: ' + FeedChannel.PubDate);
+  Memo1.Lines.Add('Image-Title: ' + FeedChannel.Image.Title);
+  Memo1.Lines.Add('Image-Link: ' + FeedChannel.Image.Link);
+  Memo1.Lines.Add('Image-URL: ' + FeedChannel.Image.URL);
   Memo1.Lines.Add('  Channel AdvancedFields: BEGIN');
   for Idx := 0 to Length(FeedChannel.AdvancedFields) - 1 do
   begin
@@ -96,6 +106,8 @@ begin
     Memo1.Lines.Add('Items-Title: ' + FeedChannel.ChannelItems[Idx].Title);
     Memo1.Lines.Add('Items-Link: ' + FeedChannel.ChannelItems[Idx].Link);
     Memo1.Lines.Add('Items-Description: ' + FeedChannel.ChannelItems[Idx].Description);
+    Memo1.Lines.Add('Items-Author: ' + FeedChannel.ChannelItems[Idx].Author);
+    Memo1.Lines.Add('Items-Guid: ' + FeedChannel.ChannelItems[Idx].Guid);
     Memo1.Lines.Add('  Items-AdvancedFields: BEGIN');
     for var I := 0 to High(FeedChannel.ChannelItems[Idx].AdvancedFields)  do
     begin

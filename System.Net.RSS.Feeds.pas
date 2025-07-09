@@ -14,11 +14,27 @@ uses
   System.Generics.Collections;
 
 type
+  TFeedChannelImage = record
+  strict private
+    FURL: string;
+    FTitle: string;
+    FLink: string;
+    procedure SetTitle(const AValue: string);
+    procedure SetUrl(const AValue: string);
+    procedure SetLink(const AValue: string);
+  public
+    property Title: string read FTitle write SetTitle;
+    property URL: string read FURL write SetURL;
+    property Link: string read FLink write SetLink;
+  end;
+
   TFeedChannelItem = record
   strict private
     FDescription: string;
     FTitle: string;
     FLink: string;
+    FAuthor: string;
+    FGuid: string;
     FPubDate: TDateTime;
     //    DAuthor, FCategory, FComments, FEnclosure, FGuid, FPubDate, FSource  ... more fields
     FAdvancedFields: TArray<TPair<string, string>>;
@@ -28,6 +44,8 @@ type
     property Description: string read FDescription write FDescription;
     property Title: string read FTitle write FTitle;
     property Link: string read FLink write FLink;
+    property Author: string read FAuthor write FAuthor;
+    property Guid: string read FGuid write FGuid;
     property PubDate: TDateTime read FPubDate write FPubDate;
     property AdvancedFields: TArray<TPair<string, string>> read FAdvancedFields;
     property Values[const AName: string]: string read GetValueByName; default;
@@ -44,6 +62,7 @@ type
     FLanguage: string;
     FCopyright: string;
     FPubDate: string;
+    FImage: TFeedChannelImage;
     FAdvancedFields: TArray<TPair<string, string>>;
 
     FChannelItems: TArray<TFeedChannelItem>;
@@ -62,6 +81,7 @@ type
     property Language: string read FLanguage write FLanguage;
     property Copyright: string read FCopyright write FCopyright;
     property PubDate: string read FPubDate write FPubDate;
+    property Image: TFeedChannelImage read FImage write FImage;
 
     property AdvancedFields: TArray<TPair<string, string>> read FAdvancedFields;
 
@@ -135,6 +155,23 @@ begin
       Exit(FAdvancedFields[Idx].Value);
     end;
   end;
+end;
+
+{ TFeedChannelImage }
+
+procedure TFeedChannelImage.SetLink(const AValue: string);
+begin
+  FLink := AValue;
+end;
+
+procedure TFeedChannelImage.SetTitle(const AValue: string);
+begin
+  FTitle := AValue;
+end;
+
+procedure TFeedChannelImage.SetUrl(const AValue: string);
+begin
+  FUrl := AValue;
 end;
 
 end.
